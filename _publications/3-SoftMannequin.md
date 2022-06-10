@@ -2,7 +2,7 @@
 title: "Soft Robotic Mannequin: Design and Algorithm for Deformation Control"
 collection: publications
 permalink: /publication/SoftMannequin
-excerpt: 'Soft Robotic Mannequin with Programmable Deformation'
+excerpt: '[1st Author]Soft Robotic Mannequin with Programmable Deformation'
 date: 2022-06-08
 venue: 'IEEE/ASME Transactions on Mechatronics'
 paperurl: 'https://ieeexplore.ieee.org/document/9788482'
