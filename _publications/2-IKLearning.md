@@ -2,7 +2,7 @@
 title: "Efficient Jacobian-Based Inverse Kinematics With Sim-to-Real Transfer of Soft Robots by Learning"
 collection: publications
 permalink: /publication/SoRoIKLearning
-excerpt: '[2nd Author]Jacobian learning Plus Sim2Real Transfer of Soft Robots'
+excerpt: '**[2nd Author]** Jacobian learning Plus Sim2Real Transfer of Soft Robots'
 date: 2022-06-03
 venue: 'IEEE/ASME Transactions on Mechatronics'
 paperurl: 'https://ieeexplore.ieee.org/document/9790339'
