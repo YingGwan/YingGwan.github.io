@@ -9,7 +9,7 @@ paperurl: 'https://sites.google.com/view/softroboticsoftware/poster-presentation
 Presenter: 'Yingjun Tian'
 Authors: 'G. Fang, Y. Tian, A. Weightman and C. C. L. Wang'
 ---
-This poster presents our recent works on soft robot simulation especially about the simulation of large deformation on pneumatic-driven soft robot.
+This poster presents our recent works on soft robot simulation especially about the large deformation on pneumatic-driven soft robot.
 
 [Workshop Website](https://sites.google.com/view/softroboticsoftware/home)
 
