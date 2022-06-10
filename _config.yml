@@ -81,7 +81,7 @@ analytics:
 # Site Author
 author:
   name             : "Yingjun"
-  avatar           : yingjun.png
+  avatar           : "https://github.com/YingGwan/TyporaUploadImg/blob/main/yingjun.jpg"
   bio              : "A Ph.D. Student in The University of Manchester"
   location         : "Manchester"
   employer         :
