@@ -3,7 +3,7 @@ title: "Efficient Jacobian-Based Inverse Kinematics With Sim-to-Real Transfer of
 collection: publications
 permalink: /publication/SoRoIKLearning
 excerpt: 'Jacobian learning Plus Sim2Real Transfer of Soft Robots'
-date: 2022-06-08
+date: 2022-08-06
 venue: 'IEEE/ASME Transactions on Mechatronics'
 paperurl: 'https://ieeexplore.ieee.org/document/9790339'
 citation: 'G. Fang, Y. Tian, Z. -X. Yang, J. M. P. Geraedts and C. C. L. Wang, "Efficient Jacobian-Based Inverse Kinematics With Sim-to-Real Transfer of Soft Robots by Learning," in IEEE/ASME Transactions on Mechatronics, 2022'
