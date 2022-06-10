@@ -3,7 +3,7 @@ title: "[**Poster**] Collision-Aware Fast Simulation for Soft Robots by Optimiza
 collection: posters
 permalink: /publication/SOROSimulator_Poster
 excerpt: '**[2nd Prize]** Fast SoRo Simulator Targeted on Large Deformation'
-date: 2022-04-04
+date: 2022-06-05
 venue: 'RoboSoft 2022 Conference: Workshop on "Software for Soft Robotics Research"'
 paperurl: 'https://sites.google.com/view/softroboticsoftware/poster-presentation'
 Presenter: 'Yingjun Tian'
