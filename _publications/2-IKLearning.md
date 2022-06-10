@@ -1,5 +1,5 @@
 ---
-title: "Efficient Jacobian-Based Inverse Kinematics With Sim-to-Real Transfer of Soft Robots by Learning"
+title: "[**Article**] Efficient Jacobian-Based Inverse Kinematics With Sim-to-Real Transfer of Soft Robots by Learning"
 collection: publications
 permalink: /publication/SoRoIKLearning
 excerpt: '**[2nd Author]** Jacobian Learning Plus Sim2Real Transfer of Soft Robots'
