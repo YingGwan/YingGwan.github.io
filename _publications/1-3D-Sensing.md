@@ -1,7 +1,7 @@
 ---
 title: "Sensing and Reconstruction of 3-D Deformation on Pneumatic Soft Robots"
 author: R. B. N. Scharff, G. Fang, **Y. Tian**, J. Wu, J. M. P. Geraedts and C. C. L. Wang
-collection: journal
+collection: publications
 permalink: /publication/SoRoSensing3D-Def
 excerpt: '**[3rd Author]** Real-time Sensing of 3D Deformation of Soft Robots via FNN & LSTM'
 date: 2021-05-07
