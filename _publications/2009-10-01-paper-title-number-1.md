@@ -1,15 +1,17 @@
 ---
-title: "Paper Title Number 1"
+title: "Soft Robotic Mannequin: Design and Algorithm for Deformation Control"
 collection: publications
-permalink: /publication/2009-10-01-paper-title-number-1
-excerpt: 'This paper is about the number 1. The number 2 is left for future work.'
-date: 2009-10-01
-venue: 'Journal 1'
-paperurl: 'http://academicpages.github.io/files/paper1.pdf'
+permalink: /publication/SoftMannequin
+excerpt: 'excerpt'
+date: 2022-06-03
+venue: 'IEEE/ASME Transactions on Mechatronics'
+paperurl: 'https://ieeexplore.ieee.org/document/9788482'
 citation: 'Your Name, You. (2009). &quot;Paper Title Number 1.&quot; <i>Journal 1</i>. 1(1).'
 ---
-This paper is about the number 1. The number 2 is left for future work.
+This article presents a novel soft robotic system for a deformable mannequin that can be employed to physically realize the 3-D geometry of different human bodies. The soft membrane on a mannequin is deformed by inflating several curved chambers using pneumatic actuation. Controlling the freeform surface of a soft membrane by adjusting the pneumatic actuation in different chambers is challenging as the membrane’s shape is commonly determined by the interaction between all chambers. 
+Using vision feedback provided by a structured-light based 3-D scanner, we developed an efficient algorithm to compute the optimized actuation of all chambers, which could drive the soft membrane to deform into the best approximation of different target shapes. Our algorithm converges quickly by including pose estimation in the loop of optimization. The time-consuming step of evaluating derivatives on the deformable membrane is avoided by using the Broyden update when possible. 
+The effectiveness of our soft robotic mannequin with controlled deformation has been verified in experiments.
 
-[Download paper here](http://academicpages.github.io/files/paper1.pdf)
+[Download paper here](https://arxiv.org/pdf/2205.05166.pdf)
 
-Recommended citation: Your Name, You. (2009). "Paper Title Number 1." <i>Journal 1</i>. 1(1).
+Recommended citation: Y. Tian, G. Fang, J. S. Petrulis, A. Weightman and C. C. L. Wang, "Soft Robotic Mannequin: Design and Algorithm for Deformation Control," in IEEE/ASME Transactions on Mechatronics.
