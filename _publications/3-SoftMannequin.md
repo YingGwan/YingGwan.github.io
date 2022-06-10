@@ -3,7 +3,7 @@ title: "Soft Robotic Mannequin: Design and Algorithm for Deformation Control"
 collection: publications
 permalink: /publication/SoftMannequin
 excerpt: 'Soft Robotic Mannequin with Programmable Deformation'
-date: 2022-06-03
+date: 2022-03-06
 venue: 'IEEE/ASME Transactions on Mechatronics'
 paperurl: 'https://ieeexplore.ieee.org/document/9788482'
 citation: 'Y. Tian, G. Fang, J. S. Petrulis, A. Weightman and C. C. L. Wang, "Soft Robotic Mannequin: Design and Algorithm for Deformation Control," in IEEE/ASME Transactions on Mechatronics.'
