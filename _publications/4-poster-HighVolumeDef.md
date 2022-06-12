@@ -2,11 +2,11 @@
 title: "[**Poster**] Collision-Aware Fast Simulation for Soft Robots by Optimization-Based Geometric Computing"
 collection: posters
 permalink: /publication/SOROSimulator_Poster
-excerpt: '**[2nd Prize]** Fast SoRo Simulator Targeted on Large Deformation'
-date: 2022-06-05
-venue: 'RoboSoft 2022 Conference: Workshop on "Software for Soft Robotics Research"  
+excerpt: '**[2nd Prize]** Fast SoRo Simulator Targeted on Large Deformation
 [Workshop](https://sites.google.com/view/softroboticsoftware/poster-presentation)  
 [Prize](https://sites.google.com/view/softroboticsoftware/poster-presentation)'
+date: 2022-06-05
+venue: 'RoboSoft 2022 Conference: Workshop on "Software for Soft Robotics Research"'
 Presenter: 'Yingjun Tian'
 Authors: 'G. Fang, Y. Tian, A. Weightman and C. C. L. Wang'
 ---
