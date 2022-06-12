@@ -3,7 +3,7 @@ title: "[**Article**] Soft Robotic Mannequin: Design and Algorithm for Deformati
 collection: publications
 permalink: /publication/SoftMannequin
 excerpt: '**[1st Author]** Soft Robotic Mannequin with Programmable Deformation  
-[IEEE](https://www.youtube.com/watch?v=5m2dzgiHc_8&t=104s)
+[IEEE](https://ieeexplore.ieee.org/document/9788482)
 [arxiv](https://arxiv.org/pdf/2205.05166.pdf)  
 [youtube](https://www.youtube.com/watch?v=5m2dzgiHc_8&t=104s)'
 date: 2022-06-08

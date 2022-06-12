@@ -2,10 +2,12 @@
 title: "[**Article**] Efficient Jacobian-Based Inverse Kinematics With Sim-to-Real Transfer of Soft Robots by Learning"
 collection: publications
 permalink: /publication/SoRoIKLearning
-excerpt: '**[2nd Author]** Jacobian Learning Plus Sim2Real Transfer of Soft Robots'
+excerpt: '**[2nd Author]** Jacobian Learning Plus Sim2Real Transfer of Soft Robots
+[IEEE](https://ieeexplore.ieee.org/document/9790339)
+[arxiv](https://arxiv.org/pdf/2012.13965.pdf)
+[youtube](https://www.youtube.com/watch?v=vv7u0SkDXCQ&feature=youtu.be)'
 date: 2022-06-03
 venue: 'IEEE/ASME Transactions on Mechatronics'
-paperurl: 'https://ieeexplore.ieee.org/document/9790339'
 ---
 This article presents an efficient learning-based method to solve the inverse kinematic (IK) problem on soft robots with highly nonlinear deformation. The major challenge of efficiently computing IK for such robots is due to the lack of analytical formulation for either forward or inverse kinematics. 
 To address this challenge, we employ neural networks to learn both the mapping function of forward kinematics and also the Jacobian of this function. As a result, Jacobian-based iteration can be applied to solve the IK problem. A sim-to-real training transfer strategy is conducted to make this approach more practical. 
