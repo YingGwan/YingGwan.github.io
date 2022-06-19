@@ -1,6 +1,6 @@
 ---
 permalink: /
-title: "Hello There"
+title: "Yingjun Homepage"
 excerpt: "About me"
 author_profile: true
 redirect_from: 
@@ -8,6 +8,4 @@ redirect_from:
   - /about.html
 ---
 
-This is the personal page of Yingjun
-
-My page is still in construction, will be right back later ---
+I am a Ph.D. Candidate from The University of Manchester, supervised by [Prof. Charlie C.L. Wang](https://mewangcl.github.io/). 
