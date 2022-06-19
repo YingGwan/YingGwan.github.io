@@ -1,5 +1,5 @@
 ---
-permalink: 
+permalink: /
 title: "Yingjun Tian"
 excerpt: "About me"
 author_profile: true
