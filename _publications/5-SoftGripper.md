@@ -2,11 +2,11 @@
 title: "[**Journal Article**] Optimizing Out-of-Plane Stiffness for Soft Grippers"
 collection: publications
 permalink: /publication/SoftGripper
-excerpt: '**[2nd Author]** Introducing optimization into the soft gripper design
+excerpt: '**[2nd Author]** Introducing Optimization Into Soft Gripper Design
 [Paper](..)  
 [Video](...)'
 date: 2022-06-30
-venue: 'RAL & IROS 2022'
+venue: 'RAL & IROS'
 Authors: ' Renbo Su, Yingjun Tian, Mingwei Du, Charlie C.L. Wang'
 ---
 In this paper, we presented a data-driven framework to optimize the
