@@ -1,5 +1,5 @@
 ---
-title: "[**Article**] Sensing and Reconstruction of 3-D Deformation on Pneumatic Soft Robots"
+title: "[**Journal Article**] Sensing and Reconstruction of 3-D Deformation on Pneumatic Soft Robots"
 author: R. B. N. Scharff, G. Fang, **Y. Tian**, J. Wu, J. M. P. Geraedts and C. C. L. Wang
 collection: publications
 permalink: /publication/SoRoSensing3D-Def

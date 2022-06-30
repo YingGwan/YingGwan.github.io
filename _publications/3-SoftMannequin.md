@@ -1,5 +1,5 @@
 ---
-title: "[**Article**] Soft Robotic Mannequin: Design and Algorithm for Deformation Control"
+title: "[**Journal Article**] Soft Robotic Mannequin: Design and Algorithm for Deformation Control"
 collection: publications
 permalink: /publication/SoftMannequin
 excerpt: '**[1st Author]** Soft Robotic Mannequin with Programmable Deformation  

@@ -1,5 +1,5 @@
 ---
-title: "[**Poster**] Collision-Aware Fast Simulation for Soft Robots by Optimization-Based Geometric Computing"
+title: "[**Conference Poster**] Collision-Aware Fast Simulation for Soft Robots by Optimization-Based Geometric Computing"
 collection: posters
 permalink: /publication/SOROSimulator_Poster
 excerpt: '**[2nd Prize]** Fast SoRo Simulator Targeted on Large Deformation
