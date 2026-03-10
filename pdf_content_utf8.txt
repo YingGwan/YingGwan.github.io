@@ -1,0 +1,1780 @@
+Virtual and Physical Prototyping
+ISSN: 1745-2759 (Print) 1745-2767 (Online) Journal homepage: www.tandfonline.com/journals/nvpp20
+Robot-assisted multi-axis embedded silicone
+printing for free-form volumetric model
+Hailin Sun, Yingjun Tian, Chenyu Xu, Mahdi Bodaghi, Fei Gao & Guoxin Fang
+To cite this article: Hailin Sun, Yingjun Tian, Chenyu Xu, Mahdi Bodaghi, Fei Gao & Guoxin Fang
+(2026) Robot-assisted multi-axis embedded silicone printing for free-form volumetric model,
+Virtual and Physical Prototyping, 21:1, e2614811, DOI: 10.1080/17452759.2026.2614811
+To link to this article:  https://doi.org/10.1080/17452759.2026.2614811
+© 2026 The Author(s). Published by Informa
+UK Limited, trading as Taylor & Francis
+Group
+Published online: 16 Jan 2026.
+Submit your article to this journal 
+Article views: 1237
+View related articles 
+View Crossmark data
+Full Terms & Conditions of access and use can be found at
+https://www.tandfonline.com/action/journalInformation?journalCode=nvpp20
+Robot-assisted multi-axis embedded silicone printing for free-form volumetric 
+model
+Hailin Sun 
+a, Yingjun Tian 
+b, Chenyu Xu 
+a, Mahdi Bodaghi 
+c, Fei Gao 
+d and Guoxin Fang 
+a,e
+aDepartment of Mechanical and Automation Engineering, The Chinese University of Hong Kong, Hong Kong, People’s Republic of China; 
+bDepartment of Mechanical and Aerospace Engineering, The University of Manchester, Manchester, UK; cDepartment of Engineering, School 
+of Science and Technology, Nottingham Trent University, Nottingham, UK; dShenzhen Institute of Advanced Technology, Chinese Academy of 
+Sciences, Shenzhen, People’s Republic of China; eInstitute of Intelligent Design and Manufacturing, The Chinese University of Hong Kong, 
+Hong Kong, People’s Republic of China
+ABSTRACT  
+Embedded silicone printing (ESP) enables the creation of complex soft structures by extruding 
+silicone inks into a gel support matrix. However, issues such as excess local ink deposition and 
+the staircase effect limit the quality of solid model prints, especially when the gel matrix is 
+immiscible with silicone ink. This work presents a multi-axis ESP framework for fabricating 
+volumetric silicone models with nearly solid infill and high surface quality. A field-based curved 
+slicing strategy is introduced to preserve critical surface features and optimise layer height 
+distribution, reducing height variation and ensuring model manufacturability. A boundary- 
+conformal staggered toolpath algorithm further promotes uniform ink deposition, while 
+adaptive toolpath width adjustment mitigates local overfilling and underfilling during curved 
+printing. The framework is validated on a multi-axis robotic platform by fabricating wearable 
+components, biomedical phantoms, and soft robotic structures. Characterization via surface 
+scanning and X-ray CT confirms an infill ratio of 99.47% and a surface error below 1.5 mm (1% 
+of the model size). The proposed framework greatly broadens the practical applications of ESP, 
+enabling the fabrication of customised and functionally integrated soft devices.
+ARTICLE HISTORY
+Received 13 November 2025 
+Accepted 4 January 2026  
+KEYWORDS  
+Embedded silicone printing; 
+multi-axis 3D printing; 
+curved slicing; spatial 
+toolpath generation; soft 
+structure
+1. Introduction
+Silicone is a widely used soft material known for its excel­
+lent heat resistance, bio-compatibility, and electrical 
+insulation properties [1]. With its outstanding durability, 
+silicone is commonly employed in soft actuators that can 
+safely interact with delicate objects and living tissues [2]. 
+Its skin-like feel and biocompatibility also make silicone 
+an ideal material for medical devices [3] and artificial 
+tissues designed to replicate natural functions [4]. With 
+growing requirements for functionality and personalisa­
+tion in soft devices (e.g. the customised socket for low- 
+limb prosthetics as shown in Figure 1), the fabrication 
+of free-form silicone objects with complex geometries 
+or topologies has become more critical and demanding. 
+Nevertheless, conventional methods like mold-based 
+casting struggle to produce such intricate designs due 
+to their reliance on free-form multi-part molds [5], 
+which lack the flexibility to adapt to other shapes for 
+mass customisation.
+Recent advancements in 3D printing have signifi­
+cantly expanded the possibilities for fabricating free- 
+form silicone models [6]. A common approach is direct 
+ink writing (DIW), where silicone is extruded and depos­
+ited following programmed paths. However, even with 
+the development of in-situ curing [7], DIW generally 
+struggles with large-scale models or intricate structures 
+with long-span suspensions, as the low-stiffness of sili­
+cone material can lead to deformation and collapse 
+under gravity. To address this, embedded silicone print­
+ing (ESP) has emerged as a promising solution. As illus­
+trated in Figure 1, the ESP process extrudes silicone ink 
+into a shear-thinning gel-like matrix, which stabilises 
+the structure and prevents collapse during printing. 
+With specially designed viscosity, the gel-based matrix 
+allows the nozzle moves freely inside to deposit silicone 
+layer by layer, and the matrix is removable or curable 
+afterward [8].
+© 2026 The Author(s). Published by Informa UK Limited, trading as Taylor & Francis Group 
+This is an Open Access article distributed under the terms of the Creative Commons Attribution License (http://creativecommons.org/licenses/by/4.0/), which permits unrestricted use, 
+distribution, and reproduction in any medium, provided the original work is properly cited. The terms on which this article has been published allow the posting of the Accepted 
+Manuscript in a repository by the author(s) or with their consent. 
+CONTACT Guoxin Fang 
+guoxinfang@cuhk.edu.hk
+Department of Mechanical and Automation Engineering, The Chinese University of Hong Kong, 
+Shatin, New Territories, Hong Kong SAR, China; Institute of Intelligent Design and Manufacturing, The Chinese University of Hong Kong, Shatin, New Territories, 
+Hong Kong SAR, China
+VIRTUAL AND PHYSICAL PROTOTYPING 
+2026, VOL. 21, NO. 1, e2614811 (21 pages) 
+https://doi.org/10.1080/17452759.2026.2614811
+While the gel-based support makes ESP an effective 
+solution for silicone printing with complex structures 
+to avoid collapse [9], the immiscibility between silicone 
+inks and the gel matrix inhibits filament fusion (details 
+discussed in Section 3). Therefore, significant overlap 
+between toolpaths is required to ensure adhesion, 
+even with fine-tuned rheological properties (e.g. shear- 
+thinning behaviour) of commonly used gel materials 
+like Carbomer, leading to localised over-deposition of 
+ink (as discussed in [10, 11] and also presented in 
+Figure 3). For thin-shell models, the excess silicone can 
+accumulate in surrounding directions without causing 
+significant issues with the final product. However, for 
+solid volumetric models, continuous ink accumulation 
+causes significant geometry errors and can even distort 
+the printed structure. As a result, the existing gel- 
+based ESP process is generally limited to fabricating 
+thin-wall structures or sparse infill models [11–13].
+On the other hand, the usage of a support gel enables 
+spatial alignment of silicone material through three- 
+dimensional nozzle motion, which introduces greater 
+design freedom and enhances fabrication flexibility. 
+Especially for free-form models, employing a spatial tool­
+path can significantly enhance surface finishing quality by 
+reducing the staircase effect (as highlighted in Figure 
+1(d)). Moreover, curved toolpaths can improve the conti­
+nuity of material extrusion during ESP, mitigating issues 
+such as stringing between discontinuous regions behav­
+iour [14, 15] and the dimensional fidelity of printed 
+models [16], its impact on deposition quality and material 
+distribution has not been systematically studied. Conse­
+quently, strategies for spatial toolpath design and multi- 
+axis system integration that address these fabrication 
+constraints in the ESP process are still lacking.
+Here, we present a systematic study on multi-axis ESP 
+for free-form volumetric models that extends the capabili­
+ties of gel-based ESP. In particular, we investigate the 
+influence of nozzle orientation on printing quality in the 
+multi-axis printing process. A comprehensive compu­
+tational framework is developed to generate toolpaths 
+that consider both design objectives and fabrication con­
+straints in ESP for solid structures (as illustrated in Figure 
+1(b,c)). The framework integrates near-uniform-thickness 
+curved slicing and width-constrained toolpath generation 
+to address extrusion control challenges in free-form volu­
+metric models. Additionally, the ink-volume control 
+mechanism further improves printing quality by prevent­
+ing excess material deposition, as demonstrated on a 
+robot-assisted printing platform. The key contributions 
+of this work are summarised as follows: 
+.
+Introducing multi-axis embedded silicone printing 
+for free-form volumetric models, with solutions for 
+spatial toolpath generation and printing direction 
+optimisation to fabricate high-quality solid models.
+.
+Investigating the influence of printing direction on 
+print quality, effectively eliminating the staircase 
+effect and maintaining printing continuity for multi- 
+axis ESP.
+.
+Developing a curved slicing strategy based on an 
+iteratively optimised scalar field to preserve critical 
+surfaces and ensure near-uniform layer heights.
+.
+Proposing a width-constrained toolpath generation 
+algorithm tailor-made for multi-axis ESP, which 
+Figure 1. (a) Proposed multi-axis embedded silicone printing (ESP) system for fabricating free-form volumetric silicone models within 
+a gel-like supporting matrix via robot-assisted spatial material deposition. The workflow of spatial toolpath generation includes (b) 
+field-based slicing optimised for uniform layer height and subsequently, (c) boundary-conformal toolpath planning with in-layer stag­
+gered deposition. Here the toolpath density is controlled with extrusion constraint w.r.t., local layer height. (d) Compared with planar- 
+based solution (printing result shown on the right), the proposed multi-axis ESP effectively reduces the staircase effect, enhancing 
+surface finishing and geometric fidelity. (e) Fabrication results of a customised prosthetic socket with nearly solid infill (CT scan indi­
+cates infill ratio at 99.47%).
+2 
+H. SUN ET AL.
+efficiently enables uniform material distribution and 
+improves infill rates for complex models.
+.
+Experimentally validating the proposed framework on 
+a robot-assisted multi-axis ESP platform by fabricating 
+various volumetric silicone models, including soft 
+robotic components, biomedical phantoms, and custo­
+mised wearable devices, demonstrating its practicality 
+for rapid prototyping of functional soft systems.
+To the best of our knowledge, this is the first work to 
+achieve multi-axis volumetric ESP with both study in 
+process optimisation and toolpath generation. The dem­
+onstrations reveal the potential applications in the rapid 
+prototyping of soft robotics, medical devices, and tissue 
+engineering.
+2. Related work
+Here we review the recent progress made on ESP and 
+multi-axis 3D printing.
+2.1. Embedded silicone printing
+With the help of gel-based support, the development of 
+embedded printing technology allows the fabrication of 
+free-form soft objects such as soft robot pneumatic 
+actuators [13]. Most existing studies on ESP focus on 
+material and process development, emphasising the 
+rheological and chemical properties of materials 
+between the ink and support matrix to ensure successful 
+printing. Notably, the effects of support matrix compo­
+sition and rheology have been systematically examined 
+in [17, 18], and various materials such as Carbopol [19], 
+Laponite nanoclay [11], gelatin [20], and fumed silica 
+nanoparticles [21] are further broadening the appli­
+cation scope of ESP. In this work, we adopt the widely 
+used Carbopol support matrix with platinum-catalysed, 
+silicone-based elastomer [8, 22] for physical validation, 
+with detailed material characterisation presented in 
+Section 3.
+On the other hand, printing parameters and toolpath 
+design significantly influence the quality of embedded 
+printing [23]. Studies have thoroughly examined 
+filament morphology under varying needle diameters, 
+motion speeds, and extrusion pressures [11, 12]. For 
+thin-shell structures, commercial planar-based slicers 
+(e.g. Cura or Bambu Studio) are commonly used for tool­
+path generation. These studies offer valuable guidance 
+for fine-tuning toolpath parameters such as line spacing 
+[23]. However, less attention has been given to printing 
+volumetric models with solid infill, where overlap 
+between layers to ensure good material adhesion [12] 
+can lead to over-extrusion (details also presented in 
+Section 3.2). While specialised curable support media 
+[24–26] can help avoid such issues, they constrain 
+material selection. In this work, we propose a general 
+slicing and toolpath generation framework for solid ESP 
+with precise extrusion control, applicable to both planar 
+and spatial printing processes using general gel materials.
+2.2. Multi-axis 3D printing and its application in 
+ESP
+Multi-axis 3D printing has garnered significant attention 
+in recent years, as the ability to change the nozzle’s 
+orientation enables functionalities that surpass those 
+of conventional planar-based printing [27, 28]. It has 
+been integrated into various 3D printing processes, 
+such as Digital Light Processing (DLP) to eliminate 
+support structures and enhance surface quality [29, 
+30], Fused Filament Fabrication (FFF) to align filaments 
+with stress tensors for model reinforcement [31], and 
+Directed Energy Deposition (DED) to reduce deposition 
+anisotropy and improve dimensional accuracy [32]. To 
+date, multi-axis 3D printing has also been explored in 
+diverse applications, including conformal electronics 
+printing [33], food printing [34], and bioprinting of 
+complex organs [35].
+With the aid of a support matrix, ESP can naturally 
+take great advantage of spatial material alignment. Exist­
+ing studies have demonstrated the potential of ESP for 
+printing 3D lattices [36] and vascular networks [37]. 
+Additionally, with carefully designed spatial toolpaths, 
+it has the great potential to improve surface finishing 
+[38] and enhance extrusion continuity of ESP process 
+(similar to spatial toolpath in DIW [39], whereas that 
+method primarily targets parts with rotational features). 
+On the other hand, although the toolpath is spatially 
+optimised, its direct implementation on a conventional 
+3-axis ESP system remains challenging for achieving sat­
+isfactory printing performance. One key reason is that, in 
+3-axis ESP, the printing angle (see Figure 2(a)) varies due 
+to the spatial nature of the toolpath and the fixed nozzle 
+orientation. This variation adversely affects the overall 
+printing quality of the ESP process. Sparrman et al. [13] 
+demonstrated that the nozzle orientation significantly 
+affects filament position accuracy, while Arun et al. [15] 
+showed that printing direction strongly impacts 
+filament morphology of ESP. These findings highlight 
+the critical role of orientation in ensuring consistent 
+and high-quality deposition. In this work, we systemati­
+cally study the relationship between the multi-axis print­
+ing process and filament morphology (Section 3.1), and 
+conduct a solution of a robot-arm-based system to 
+ensure good printing quality with controlled nozzle 
+orientation.
+VIRTUAL AND PHYSICAL PROTOTYPING 
+3
+Moreover, ESP differs fundamentally from conven­
+tional 3D printing processes (e.g. FFF or DLP) due to its 
+unique filament morphology characteristics. Specifically, 
+in ESP, the ratio between toolpath height and width 
+dynamically changes with printing speed and is tightly 
+interdependent with each other (reported in [12] and 
+also demonstrated in Figure 2(d)). This dynamic behav­
+iour makes it challenging to directly adapt existing 
+multi-axis slicing methods designed for other processes, 
+as they often assume fixed or predictable filament 
+dimensions [40]. Consequently, these limitations restrict 
+the flexibility and full potential of multi-axis ESP for 
+complex geometries. Building on these insights, we 
+propose a curved-layer slicing and width-constrained 
+toolpath generation method (Section 4) to enable suc­
+cessful multi-axis ESP for free-form volumetric models. 
+Case studies showcasing various applications are pre­
+sented in Section 5.
+3. Morphology and fabrication limits of multi- 
+axis ESP
+In this section, preliminary experiments on the filament 
+morphology with multi-axis ESP are presented, detailing 
+the materials used and the effects of printing speed and 
+angle, concluding with toolpath design objectives and 
+fabrication constraints for the subsequent spatial print­
+ing toolpath generation.
+3.1. Filament morphology with extrusion 
+parameters
+We first study the morphology of a single spatial path in 
+multi-axis ESP where two primary printing parameters 
+govern material deposition: the nozzle’s moving speed 
+ve and the printing direction α (angle between the 
+nozzle axis and the moving direction, see Figure 2(a)). 
+These parameters directly influence the local deposition 
+volume and material morphology. In our multi-axis ESP 
+setup (Figure 1(a)), the extruder employs two servo 
+motors to mix silicone components and maintain a con­
+stant extrusion speed, ensuring a steady material flow 
+into the supporting gel over time. Consequently, adjust­
+ing ve regulates the deposited volume locally, while 
+varying α allows control over directional deposition 
+behaviour.
+The printing tests were conducted using Carbomer as 
+the support bath and three silicone oils with different 
+rheological properties as printing inks: Ecoflex 0030, 
+Dragon Skin 10, and Mold Star 30,1 with details provided 
+in Section 5.2. The extrusion parameters (ve and α) were 
+varied along different printing path to investigate the 
+Figure 2. Analysis of rheological properties and filament morphology. (a) Illustration for filament dimension parameters and the print­
+ing angle. (b) Viscosity of ink and support matrix tested by rheometer (model: Haake Mars 40). (c) Storage modulus of ink and support 
+matrix at the frequency of 1 Hz – both exhibit shear-thinning property. The storage modulus of ink is one to two orders of magnitude 
+larger than the matrix material, which makes it ideal for ESP [17]. (d) Impact of the printing speed on filament morphology. (e) Impact 
+of the printing angle on filament morphology (data tested under printing speed of 3 mm/s). (f) Variation of the cross-sectional area 
+with printing speed, where polynomial fitting is used to fit the data for continuous calculation for extrusion constraint (Equation (2)).
+4 
+H. SUN ET AL.
+morphology of the printed silicone, which was charac­
+terised by the filament width wf and height hf of the 
+cross-sections. As shown in Figure 2(d), at low printing 
+speeds, the filament cross-sections were oval-shaped, 
+with both wf and hf decreasing as the speed increased. 
+At higher printing speed, the cross-sections became 
+nearly circular due to larger yield areas in the support 
+matrix, reducing confinement on the ink during extru­
+sion [11]. These observations highlight the strong 
+influence of printing speed on filament morphology. In 
+multi-axis ESP, where local printing speeds vary dynami­
+cally to achieve spatially controlled extrusion, such mor­
+phological sensitivity becomes even more pronounced. 
+To maintain relatively uniform layer geometry under 
+these conditions, layer height (constrained with ve) 
+must be optimised in relation to the local printing- 
+speed distribution and this is implemented by the algor­
+ithm described in Section 4.1.
+We also observed that the printing angle had a sig­
+nificant influence on the morphology of the extruded 
+silicone filament. As shown in Figure 2(e), when the 
+nozzle orientation deviated from being perpendicular 
+to the printing direction (i.e. a = 90◦), both the 
+filament width wf and height hf were markedly 
+affected. Moreover, as previously reported in [13], the 
+positional accuracy of the filament is reduced under 
+non-perpendicular extrusion and requires compen­
+sation. In this study, to eliminate the influence of α on 
+filament morphology and ensure precise deposition, 
+we leveraged the multi-axis robotic setup to maintain 
+perpendicular extrusion whenever possible. For regions 
+with steep surface slopes or potential collision risks, 
+the nozzle orientation is allowed to vary within 
+a [ [70◦, 110◦] to minimise adverse effects (detailed in 
+Section 5.2). Consequently, this approach enables 
+more consistent control over filament morphology com­
+pared with conventional three-axis systems that employ 
+a fixed nozzle orientation.
+3.2. Objectives of toolpath design for volumetric 
+ESP
+Building on the investigation of single-filament mor­
+phology, we now present the following study to estab­
+lish a suitable toolpath strategy for printing solid 
+silicone structures, which can also be generalised to 
+multi-axis ESP with dynamically changing printing 
+speed. In printing solid models, three key aspects must 
+be considered: ensuring sufficient fusion with the under­
+lying filaments, achieving uniform ink spreading, and 
+ensuring appropriate ink extrusion. To address these 
+challenges, we employ a deliberate interlayer overlap 
+to promote reliable bonding, a staggered toolpath 
+pattern to enhance ink uniformity, and a volume-preser­
+ving staggered strategy to mitigate over/under ink 
+deposition.
+For planar-based ESP printing of thin-walled models, 
+the strategy for extrusion control and toolpath design is 
+relatively straightforward: a constant printing speed can 
+be applied to achieve wf ≈hf (i.e. regular filament cross- 
+section realised by high printing speeds) [11, 41]. 
+Additionally, due to the immiscibility between silicone 
+inks and the gel matrix, it is common to set the layer 
+height H and toolpath width W smaller than the 
+filament height hf and width wf, as expressed by 
+H = b · hf and W = b · wf where b , 1 reflects the 
+overlap ratio between filaments. Here, the selection of 
+a smaller β indicates larger inter-path overlap and 
+better filaments merging [12, 13]. However, this 
+approach is not suitable for printing volumetric 
+models. As illustrated in Figure 3(a,b) with the example 
+of printing a solid cube, selecting a higher β results in 
+poor inter-filament fusion, while a lower β (a strategy 
+effective for thin-shell structures) causes severe over- 
+extrusion and geometric distortion.
+To address this limitation, we adopt a volume-preser­
+vation strategy, in which the toolpath width is intention­
+ally set larger than the filament width to ensure 
+consistent material deposition (illustrated in Figure 3(c, 
+d)). Under this approach, W is determined by satisfying 
+the constraint of volume preservation, where the total 
+silicone volume Vtotal used for printing is calculated 
+w.r.t., printing speed ve and cross-section area Af as:
+Vtotal =
+􏽚t
+0
+veAf(ve) dt = C · Ttotal
+(1) 
+≈
+􏽘
+N
+i=1
+‖pi −pi−1‖ · H(p) · W(p)
+(∀pi [ P).
+(2) 
+Here, Equation (1) quantifies the actual material extru­
+sion governed by the extruder’s capability, where Ttotal 
+represents the total printing time. The parameter C
+denotes the unit extrusion volume per time step. It 
+remains constant throughout the printing process, 
+which is calibrated to be 6.57 mm3/s. Equation (2) is 
+the designed extrusion by toolpath parameter includes 
+layer height H(p) and toolpath width W(p) at each 
+waypoint. In this work, proper extrusion control is 
+enabled 
+for 
+each 
+time 
+sequence 
+(i.e. 
+time 
+Dt = ‖pi −pi−1‖/ve(p), the time taken to move 
+between two neighbouring waypoints), where we prior­
+itise H(p) to be first computed by curve-layer decompo­
+sition of the printed model (see details in Section 4.1) 
+and the volume-preserving ensures:
+C · ‖pi −pi−1‖
+ve(p)
+; ‖pi −pi−1‖ · H(p) · W(p)
+(3) 
+VIRTUAL AND PHYSICAL PROTOTYPING 
+5
+In this way, the designed proper toolpath width W(p) for 
+waypoint p is constrained to
+W(p) =
+C
+H(p) · ve(p) =
+C
+H(p) · f(H(p)/b)) .
+(4) 
+which is determined by the local layer height. Here, f(·) is 
+a function calibrated from physical data presented 
+in Figure 2(d), representing the relationship between 
+printing speed and the morphology of the filament 
+cross-section. When choosing local printing speed for 
+multi-axis ESP by ve(p) = f(hf(p)) = f(H(p)/b), we need 
+first to determine the parameter β. Although a smaller 
+β means better interlayer fusion and improved surface 
+quality [13], it also results in sparser in-layer toolpath 
+(as described in Equation (4)), which increases the risk 
+of entrapping the supporting matrix and forming 
+larger infill defects. Considering the trade-offs between 
+surface quality and infill performance, we selected 
+b = 0.5 for all experiments as filaments printed at 
+different velocities merged reliably under this condition 
+while also maintaining good infill quality (the result can 
+be found in Section 5.3).
+With the toolpath-width constraint, the extrusion 
+compensates for the ‘gap’ regions between adjacent 
+filaments by slightly over-extruding in height, ensuring 
+that the total extruded volume aligns with the design 
+requirements. As illustrated in Figure 3(c), although 
+this compensation improves inter-layer bonding and 
+prevents over-extrusion, uniformity remains limited 
+when successive layers shared the same toolpath direc­
+tion, resulting in the formation of vertical voids along the 
+stacking direction. To overcome this limitation, a stag­
+gered toolpath strategy is employed, in which the print­
+ing direction of each successive layer is arranged 
+perpendicular to that of the previous one, as shown in 
+Figure 3(d). This interlaced deposition pattern signifi­
+cantly reduced internal pores, as confirmed by the CT 
+analysis, which revealed a pore ratio of 0.1% of the 
+total volume.
+It is worth mentioning that the proposed volume- 
+preservation and staggered-toolpath strategies can be 
+generalised to multi-axis printing scenarios with variable 
+printing speeds or non-uniform extrusion rates, and the 
+objectives for toolpath design contain:  
+Figure 3. Printing results of a solid cube fabricated under different toolpath generation strategies. (a) A toolpath with minor overlap 
+(e.g. large b = 0.9) in both width and height leads to insufficient fusion due to immiscibility between silicones and matrix materials. 
+(b) In contrast, a large overlap (small b = 0.5) causes over-extrusion and results in geometric distortion. (c) A non-staggered toolpath 
+with large inter-layer overlap and a volume-preserving width constraint enables stable extrusion, but produces vertically aligned voids 
+due to the repetitive stacking direction. (d) When both the volume-preserving constraint and the staggered-toolpath strategy are 
+applied, a dense and uniform structure is achieved, effectively minimising internal pores and geometric deviation.
+6 
+H. SUN ET AL.
+.
+With computed variable layer height, local toolpath 
+width needs to be constrained (computed by Equation 
+(4)) at each waypoint to ensure adequate infill.
+.
+The toolpath between neighbouring curved layers 
+should stagger with each other to ensure proper 
+fusion;
+Existing algorithms for spatial toolpath generation do 
+not account for these requirements in embedded print­
+ing. In the following section, we present a computational 
+framework specifically designed for toolpath generation 
+in multi-axis ESP of volumetric models.
+4. Width-constrained spatial toolpath for 
+multi-axis ESP
+With a given volumetric model with free-form surfaces 
+(represented as a tetrahedral mesh M), our compu­
+tational pipeline starts from generating a set of curved 
+working surfaces {Sk}k=1,2,...N to decompose M. As illus­
+trated in Figure 4, these curved printing layers define the 
+local layer thickness, which is controlled within the capa­
+bility of the physical extruder setup (as discussed in 
+Section 3). In the framework and as previously discussed, 
+the critical region is preserved to ensure the best print­
+ing quality and the continuity of the print (e.g. top 
+curved surface of the prosthetic socket model high­
+lighted in green on Figure 4(b–d)).
+Subsequently, the spatial toolpath T (discretized as a 
+set of waypoints P) is computed for each curved 
+working surface, taking into account width constraints. 
+Specifically, as discussed in Section 3.2, crossing-based 
+toolpaths with two different patterns (contour-parallel 
+and staggered zig-zag pattern) are employed to ensure 
+proper infill during the ESP process.
+In the following, we first demonstrate the method to 
+optimise for layer height with iterative-based optimis­
+ation, then present the technique of width-constraint 
+toolpath computing.
+4.1. Iteration-based curved slicing with layer 
+height control
+To compute curved working surfaces for multi-axis ESP, 
+we follow a field-based computing strategy [42], in 
+which a scalar field G is defined and each vertex of the 
+model is assigned a scalar value g(x). The field G is 
+then optimised, and the curved layers are extracted as 
+iso-surfaces 
+of 
+the 
+input 
+model, 
+expressed 
+as 
+S = x | ∀, x [ R3, g(x) = c, where c is the iso-value and 
+S is represented by a triangular mesh. Note that the 
+material accumulation direction in this way is controlled 
+by the gradient of G, which is installed at the center of 
+each element ∇g(e). The local layer height is also 
+defined as the norm of this gradient, i.e. H(e) = ‖∇g(e)‖.
+With the need to protect surface quality and ensure 
+that the printing angle α and layer height H do not 
+exceed the capability of the printing setup, as discussed 
+in Section 3, we encode the objective of (i) critical- 
+surface preservation, (ii) target layer height, and (iii) 
+printing direction smoothness via:
+arg min
+G
+va
+􏽘
+x[V
+g(x) −̅GV
+􏼍􏼍
+􏼍􏼍2+vl
+􏽘
+e[M
+(‖∇g(e)‖ −Ht)2
++ vh
+􏽘
+f[M, ei>ej=f
+∇g(ei) −∇g(ej)
+􏼍􏼍
+􏼍􏼍2,
+(5) 
+where the first term preserves the surface quality of the 
+critical region Ω and ensures continuous printing, with 
+GV representing the average guidance value of Ω. The 
+second term optimises for layer height with the target 
+Ht set to the unit height for numerical computation, 
+while the third term evaluates gradient compatibility 
+(w.r.t. printing direction). Here, ei and ej are neighbouring 
+elements that share the same face f; optimising gradient 
+compatibility prevents the formation of highly curved sur­
+faces that require large local printing angles. va, vl, and 
+vh are corresponding weighting for each objective.
+However, directly solving the optimisation in Equation 
+(5) by gradient-based optimisation will lead to a local 
+minimum solution as the layer thickness objective con­
+tains a nonlinear evaluation of ‖∇g‖. Additionally, ̅GV is 
+also an unknown variable in the first place in the optimis­
+ation [42]. As a result, the layer height cannot be con­
+trolled within a small range to satisfies extrusion ability 
+(see the illustration in Figure 4(e) iteration 1).
+Tackling this issue, and considering the objectives in 
+Equation (5) are mostly related with ∇g, which naturally 
+formulates a gradient vector field, we adopt an iterative 
+optimisation approach with vector-scalar field convert­
+ing to find a better solution for curve layer slicing. As 
+demonstrated in Figure 4(b,c), each element has been 
+assigned with vector v(e), which formulates a vector 
+field , and the optimisation problem in Equation (5) 
+can be convert into find an optimal vector field as
+arg min
+V
+vl
+􏽘
+e[M
+v(e) −
+∇g(e)
+‖∇g(e)‖
+􏼍􏼍􏼍􏼍
+􏼍􏼍􏼍􏼍
+2
++ vh
+􏽘
+f[M, ei>ej=f
+v(ei) −v(ej)
+􏼍􏼍
+􏼍􏼍2
+s.t.
+v(e) = nf(e)
+(∀e [ V)
+(6) 
+where the layer height objective is enforced by setting the 
+initial vector close to the normalised gradient (i.e. to 
+achieve uniform layer height). Additionally, critical region 
+protection is formulated as a Neumann boundary 
+VIRTUAL AND PHYSICAL PROTOTYPING 
+7
+condition in the constraints, ensuring that in these regions, 
+the material growth direction aligns with the normal nf of 
+the boundary face f. All objectives in Equation (6) are quad­
+ratic, so a linear system can be used to directly find the 
+optimal vector field V, and the corresponding scalar field 
+can then be computed by minimising
+arg min
+G
+Oalign(G, V) =
+􏽘
+e[M
+‖∇g(e) −v(e)‖2,
+s.t.
+g(x) ; ̅GV
+(∀x [ V)
+(7) 
+which is equivalent to solving the Poisson’s equation (also a 
+linear system) [43] as
+DG = ∇· V
+(8) 
+Here Δ is the Laplacian operator, and the right side com­
+putes the divergence of the vector field. Experimentally, 
+Oalign also implicitly reflects the variation of layer height 
+(refer to Ref. [43] and Figure 4(e)), and we invite an iter­
+ation-based process to find a smooth scalar field with con­
+trolled distribution of layer height by the following steps:  
+.
+Step 1: compute initial scalar field G0 by solving 
+Equation (5).
+.
+Step 2: take G0 as input and find optimised vector 
+field V that satisfies fabrication objectives defines in 
+Equation (6).
+.
+Step 3: compute the Poisson’s equation Equation (8) 
+to find corresponding Gnew, evaluate Oalign(Gnew, V) 
+with Equation (7).
+Steps 2 and 3 are run iteratively by taking Gnew = G0 
+back into step 2 at each iteration. The iteration terminates 
+when Oalign is converge (i.e. change less than 10−2 times 
+last iteration). It is worth noting that, due to the boundary 
+protection requirement (i.e. Neumann boundary in 
+Equation (6)), it is mathematically proven that the field 
+cannot be optimised into a unit field with constant layer 
+height everywhere. However, using the iteration-based 
+solver introduced in this work, the layer height is opti­
+mised to be as uniform as possible, as shown in Figure 
+4(f). For each vertex on the printing surface, the layer 
+height H(x) is computed from the final gradient length 
+of the scalar field, which serves as input for the width-con­
+strained toolpath optimisation to determine W(p).
+4.2. Width-constrained toolpath design with 
+staggered pattern
+With the curved printing layers generated (Section 4.1), 
+the next step is to develop a toolpath generation algor­
+ithm on each individual layer. As previously discussed, 
+generating toolpaths for multi-axis ESP to achieve 
+Figure 4. Diagram for showing the pipeline of our field-based curved slicing method. (a) Input Solid model T for slicing. (b) The 
+process of scalar field optimisation. Left top: initially computed scalar field; Right bottom: update vector field by solving Equation 
+(6), the green vectors highlight user-defined anchor vectors in critical regions and cyan vectors are obtained via interpolation. (c) 
+The final gradient field and scalar field lead to optimised layer height variation. (d) The curved working surfaces are extracted as a 
+set of iso-surfaces. (e) Error convergence of the objective function Oalign in Equation (7) w.r.t., iteration count, which is well 
+reflected in (f) the layer-height distribution after different numbers of iterations. The results show that the layer height is effectively 
+controlled, ensuring improved extrusion stability in the ESP process.
+8 
+H. SUN ET AL.
+good extrusion in volumetric models requires addres­
+sing two key objectives: (1) toolpaths are to be stag­
+gered between layers to fill gap regions effectively, 
+and (2) local toolpath width must be controlled based 
+on the defined W(p), which is computed from the layer 
+height.
+Here, we present a solution that employs a staggered 
+pattern combining boundary-conformal and perpen­
+dicular zig-zag patterns. We first demonstrate this 
+approach on a printing layer with uniform layer height, 
+where both patterns are controlled by frequency par­
+ameters to ensure an equally spaced stripe arrangement. 
+Subsequently, a deformation-driven parameterisation 
+method is introduced to incorporate non-uniform layer 
+heights as a scalar field H into the toolpath generation, 
+ensuring all fabrication requirements are met.
+As demonstrated in Figure 5, for all the printing layer 
+{S} generated as iso-layer of M, the pattern is defined by 
+the index. For even layers, the nozzle moves along the 
+contour shape to form a boundary-conformal pattern, 
+while in odd layers, the nozzle’s movement trajectory 
+is orthogonal to the contour shape. This approach 
+ensures a more uniform distribution of ink in both the 
+circumferential and radial directions, even within iso­
+layers with complex geometry (more result can be 
+seen in the result Section 5).
+Without the loss of generality, we first present our 
+toolpath computing algorithm on a curved surface 
+with a constant toolpath width W. For boundary-confor­
+mal pattern, we follow field-based strategy where the 
+computation starts with the generation of a geodesic 
+distance field using the boundary as source [44] (see 
+Figure 5(b,c)). With computed distance as a scalar field 
+D, each vertex of x [ S is assigned with a scalar value 
+d(x) and the k-th toolpaths Lk on the even layer can 
+be generated by extract from S as iso-contour
+Leven = {Lk
+even} = {p | ∀p [ R3, d(p) = t · kW, k [ Z+}.
+(9) 
+Since D is a geodesic distance field, a constant width of 
+W can be maintained between neighbouring toolpaths. 
+The factor τ (ranging from 0.98 to 1.02 based on our 
+tests) is introduced to adjust the total length computed 
+in Equation (9), ensuring it matches the required 
+material volume for silicone (computed by Equation (1)).
+On the other hand, computing odd layers with an 
+orthogonal pattern to the boundary-conformal toolpath 
+is non-trivial. Mathematically, there is no guarantee of 
+finding another scalar field f(x) such that its gradient 
+is perpendicular to ∇d(x) everywhere in the mesh 
+while keeping a constant toolpath width. Specifically, 
+the toolpath objectives of staggering and width 
+constraint, 
+expressed 
+as 
+∇f(x) · ∇d(x) = 0 
+and 
+|∇f(x)| = c (∀x [ S), respectively, may conflict with 
+each other in layers with complex geometries.
+We propose a periodic scalar field with frequency 
+control to address the challenge of generating toolpaths 
+within a width constraint. As shown in Figure 5(d), at 
+each vertex the periodic scalar valued is defined w.r.t., 
+complex-number form as
+C(x) = eic(x) = cos (c(x)) + i sin (c(x)),
+(10) 
+where c(x) is the angle (or phase) at the vertex as 
+another parameterisation of the periodic scalar field. 
+With this periodic scalar field, the printing toolpath is 
+extracted with initial phrase, and the toolpath width is 
+controlled by the frequency (w.r.t., the phrase change 
+∇c). In this way, the objective of toolpath generation 
+Figure 5. An overview of our algorithm for boundary-conformal staggered toolpath generation. (a) Curved Printing layer. (b) Bound­
+ary distance field D. (c) Boundary conformal toolpath computed for odd layer. (d) Illustration of toolpath generation using a periodic 
+function on a triangle element. (e) Control vector field z(x). (f) The periodic scalar field ψ, which gradient ∇c perpendicular with z(x). 
+(g) the stripe pattern toolpath generated for even layers. (h) Comparison on toolpath widths distribution generated by different 
+methods.
+VIRTUAL AND PHYSICAL PROTOTYPING 
+9
+with scalar field computing is formulated as
+arg min
+C
+O phrase =
+􏽘
+∀Ei,j[S
+‖Cj −eiDci,jCi‖2
+s.t.
+Dci,j ; t · 2p
+W · 1
+2 (〈zi, ei,j〉+ 〈zj, ei,j〉)
+(∀Ei,j [ S).
+(11) 
+Here 
+in 
+the 
+constraint, 
+the 
+vector 
+z(x) = (∇d(x)/‖∇d(x)‖)⊥presents the normalised gradi­
+ent rotated by 90 degree (denoted as ⊥), which both 
+enforces the orthogonality condition and ensures 
+uniform toolpath width, as the gradient of the scalar 
+field is aligned with the rotated gradient of the distance 
+field, and to have constant norm. The target phrase 
+change Dci,j between vertex vi to vj along the edge 
+Ei,j is computed by projection with dot product 〈·, ·〉. 
+The constrained optimisation Equation (11) is in a quad­
+ratic form and can be effectively solved by a linear 
+system with conversion from the complex variable into 
+real-valued vectors (details can be found in [45]).
+With the optimised periodic field, the printing path 
+for odd layer is extracted as crest lines of the periodic 
+function (see Figure 5(d)), which can be written as
+Lodd = {p | ∀p [ R3, c(p) = 2Np, N [ Z}.
+(12) 
+Note that the frequency is controlled by the variable t
+W 
+and is determined iteratively using a binary search 
+method to match the required material volume. Both 
+toolpath Leven and Lodd are then connected into a con­
+tinuous path using the A* (shortest-path-search) algor­
+ithm [46]. As illustrated in Figures 5(h) and 8(c), 
+compared with the real-number-based toolpath with 
+f(x) obtained using the Poisson-equation solver 
+(similar to Equation (8) – matching Df = ∇· z), the 
+stripe-like pattern proposed in our framework signifi­
+cantly optimises the path width to better match the 
+target value, thereby improving extrusion quality.
+4.3. Spatial toolpath generation with variable- 
+width control
+This subsection focuses on computing the final physical 
+printing parameters for multi-axis ESP, considering 
+volume preservation in the printing case with variable 
+layer height H(x) where corresponding changes on tool­
+path width W(x) (computed with Equation (4)) are 
+necessary to ensure consistent material deposition. 
+This is computationally infeasible to be directly enforced 
+in the aforementioned constant-width-based toolpath 
+generation method.
+Here, we propose a deformation-driven method 
+to solve this fabrication constraint. As illustrated in 
+Figure 6, the original printing surface S is first mapped 
+into a deformed shape Sd. The purpose of this defor­
+mation-based mapping is to enforce a uniform target 
+toolpath width on Sd (i.e. W(x) is a constant everywhere 
+in the surface). This allows the methods described in 
+Equations (9) and (12) to be directly applied to Sd, with 
+the final printing toolpath computed with inverse 
+mapping to the original surface, naturally satisfying the 
+original width requirements. The deformation-driven 
+mapping is determined by solving the following optimis­
+ation problem:
+arg min
+Sd={Vd
+f }
+Omap =
+􏽘
+∀f[S
+‖N · Vd
+f −Rf · Sf · (N · Vf)‖2
+F.
+(13) 
+Here f represents a triangular element of the surface, with 
+its vertices position xi = [xi, yi, zi] organised into the 
+matrix Vf = [x1, x2, x3]T [ R3×3. The scaling matrix, 
+Sf = diag(sf, sf, sf), encodes the local scaling factor sf 
+which adjusts the width to match the target value. The 
+scaling factor is computed as:
+sf =
+3 ̅W(S)
+􏽐3
+i=1 W(xi)
+(14) 
+where W(xi) is the target toolpath width at vertex xi, and 
+the term ̅W(S) represents the average toolpath width over 
+the 
+entire 
+surface. 
+The 
+translation 
+matrix 
+N = I3×3 −
+1
+3 13×3 ensures evaluations are translation- 
+invariant, while the rotation matrix Rf eliminates the 
+effect of affine transformations. The optimisation in 
+Equation (13) solves for both deformed vertex positions 
+Vd
+f and Rf using a local-global solver, which converges 
+efficiently in a few iterations [47].
+The field-based width-constrained toolpath gener­
+ation method is then applied in Sd, where Equations 
+(9) and (12) define toolpath and are discretised into way­
+points {pd}, ensuring the local width W(pd) remains con­
+stant. For each waypoint pd, the barycentric coordinates 
+(g1, g2, g3) are computed with respect to the corre­
+sponding triangle f [ Sd as:
+g1 = A(p, xd
+2, xd
+3)
+A(f)
+,
+g2 = A(p, xd
+1, xd
+3)
+A(f)
+,
+g3 = 1 −g1 −g2
+(15) 
+where A(·) evaluates the area of a given triangle.
+The final waypoint p used in multi-axis ESP, which con­
+tains both positional and directional information, is 
+mapped from the offset surface Sd back onto the original 
+surface S using the computed barycentric coordinates:
+p = g1x1 + g2x2 + g3x3, 􏿻nf
+􏼂
+􏼃[ R6
+(16) 
+where xi [ S denotes the vertex positions of the corre­
+sponding triangle on the original surface. As shown in 
+10 
+H. SUN ET AL.
+Figure 6(e), with the help of this mapping-based 
+approach, the precision of the toolpath width has been 
+significantly improved and the error required to achieve 
+90% cumulative probability reduced from 24.3% to 
+6.9%. It is worth mentioning that the local printing direc­
+tion 􏿻nf is assigned as the unit normal of the face f [ S to 
+always keep local printing angle a = 90◦, ensuring 
+smooth orientation transitions and geometric consistency 
+in the printing process.
+5. Result and discussion
+We evaluated the performance of the proposed toolpath 
+generation framework for multi-axis ESP on various volu­
+metric models, including applications in soft robotics, 
+medical phantoms, and wearable devices. This section 
+provides a detailed description of the robot-assisted 
+ESP setup, along with both computational and exper­
+imental fabrication results. Additional details can also 
+be found in the supplemental video. 2
+5.1. Computational details and test cases
+The computational framework, including curved slicing 
+with optimised layer height (Section 4.1) and width- 
+constrained spatial toolpath generation (Section 4.2), 
+was implemented in C++ using Visual Studio. High- 
+quality isotropic tetrahedral meshes, required as input 
+for the computation, were generated using a particle- 
+based method [49]. All linear equation solvers and 
+matrix computations were accelerated with the Eigen 
+library [50].
+With the ability to handle volumetric models with 
+arbitrary internal geometry, the first test case of the 
+proposed ESP method is pneumatic-driven soft 
+robots. As shown in Figure 7(a), these robots are 
+designed with various internal structures (e.g. place­
+ment of solid regions highlighted in yellow), enabling 
+them to deform into different shapes. Conventional 
+modelling is challenging to fabricate these design 
+due to irregular internal channels requiring complex, 
+hard-to-remove molds. Existing ESP solutions proposed 
+for thin-wall structures [11, 41] also cannot handle 
+these models, as large overlaps in x-y and z directions 
+cause geometry distortion when printing solid regions 
+(as previously discussed in Section 3.1). Our toolpath 
+generation overcomes this by using staggered toolpath 
+with boundary-conformal and zig-zag patterns for odd 
+and even layers, respectively, ensuring geometry adap­
+tation of toolpath, width-constrained toolpath distri­
+bution, and robust filament fusion (see Figure 7(c)). 
+This achieves precise extrusion control for leak-free fab­
+rication (see Figure 11 and Section 5.3 for results). 
+Notably, our slicing algorithm presented in Section 
+4.1 degenerates into a planar-based one for this case, 
+with critical surfaces Ω selected as the top and 
+bottom layers and generating a constant scalar field 
+gradient ∇g = [0, 0, 1] throughout the model (Figure 
+7(b)).
+The second model tested is a vascular phantom with 
+obstructive solid regions. As shown in Figure 8(a), the 
+aortic atheroma is located on the inner curvature of 
+the aortic arch and the proximal descending aorta, 
+areas with a high clinical incidence of atherosclerosis 
+due to hemodynamic properties (highlighted in 
+purple). This model combines both thin-shell and solid 
+regions, with five critical regions selected as boundary 
+conditions for protection, which present challenges 
+that existing methods designed for thin-wall structures 
+[8, 51] are unable to address. The slicing result and tool­
+path for the critical curved working surface using the 
+proposed method are shown in Figure 8(b,d), respect­
+ively. Compared to planar-based slicing, multi-axis print­
+ing significantly ensures continuous extrusion, as 
+highlighted in the zoom-in view of the aortic atheroma 
+region (near V3). Quantitatively, our iteration-based 
+curved-layer slicing method yields more uniform layer 
+heights, with their variation reduced by approximately 
+Figure 6. An overview of our width-constrained toolpath algor­
+ithm (a) Original isolayer with path-width field. (b) Isolayer after 
+width-based deformation with constant path-width field. (c) 
+Equal-width toolpath generated on deformed isolayer(d) 
+Width-constrained toolpath extracted on original isolayer. (e) 
+Cumulative distribution of path-width error with and without 
+width-based deformation.
+VIRTUAL AND PHYSICAL PROTOTYPING 
+11
+70% compared with that computed using harmonic con­
+straint [42], as shown in Figure 8(c).
+We further evaluated the performance of our tool­
+path algorithm on a model with free-form volumetric 
+parts and an integrated internal cavity, as shown in 
+Figure 9. The deformable membrane consists of two 
+parts (base and top membrane), and can be actuated 
+pneumatically to mimic various human body shapes 
+[52]. Conventional molding methods for such designs 
+are time-consuming and can fail to ensure airtightness 
+due to the gluing between parts [48]. In contrast, 
+multi-axis ESP allows it to be fabricated in one piece 
+with the optimised spatial toolpath, where the base 
+and top region with variable thickness are fabricated 
+together with an overlapping interface (as shown in 
+Figure 9(b)), ensuring robust interfacial bonding and 
+air-tightness. As can be seen from Figure 9(c), our 
+iteration-based curved-layer slicing with surface-preser­
+ving capability maintains extrusion continuity on critical 
+surfaces (denoted as V1 −V4). The computed bound­
+ary-conformal and perpendicular zig-zag toolpath is 
+illustrated in Figure 9(d), demonstrating the effective­
+ness of our deformation-driven variable-width control 
+algorithm (presented in Section 4.3). Without width 
+control, large variations in layer height result in over- 
+and under-deposition (Figure 9(e), left). Our algorithm 
+distributes ink effectively across the curved surface, 
+ensuring that approximately 90 % waypoints are well 
+adjusted according to layer height (Figure 9(f)), reducing 
+extrusion errors by 82%.
+The final model is a customised lower-limb prosthetic 
+socket (see Figure 1), with its shape captured via CT scan 
+and designed to perfectly fit the patient [53]. The con­
+ventional mold-based fabrication method is expensive 
+Figure 7. (a) Computational results for three soft robot models with various solid internal cavities (solid regions shown in yellow, with 
+thin-wall parts rendered in semi-transparent gray). (b) With the top and bottom layers selected as the ROI, constant layer heights are 
+generated, and the planar surfaces are computed. (c) Toolpath generation for various layers: odd layers use boundary-conformal pat­
+terns, and even layers use perpendicular zig-zag patterns, both optimised for leak-free soft robot fabrication via ESP.
+12 
+H. SUN ET AL.
+and labour-intensive, making rapid, low-cost personal 
+customisation difficult. Furthermore, existing planar- 
+based ESP cannot ensure continuous material extrusion, 
+resulting in poor surface finishing on highly curved 
+regions (highlighted in the zoom-in view of Figure 
+1(d)). As previously discussed, our curve-layer slicing 
+and spatial toolpath design for ESP demonstrates 
+superior computational results. Through iterative pro­
+cessing, the variation in layer height is reduced by 60% 
+(the standard deviation decreases from 0.0852 mm to 
+0.0327 mm), as shown in Figure 4. Meanwhile, the defor­
+mation-based algorithm ensures that 95% of spatial 
+waypoints are precisely controlled, achieving consistent 
+extrusion and substantially improving performance 
+compared with direct computation (see Figure 6).
+Notably, the proposed toolpath generation algorithm 
+demonstrates scalable computational performance, 
+further 
+accelerated 
+through 
+CPU-based 
+parallel 
+processing using the Intel MKL library [54]. Table 1 sum­
+marises the computational cost for all tested models, 
+showing that computation times remain manageable 
+even for final spatial toolpaths containing over 496.8 k 
+waypoints, with an input tetrahedral mesh of 255.8 k 
+elements. In our implementation, the mesh density is 
+determined according to the model size and was set 
+to make average edge length at 1.2 mm to balance 
+between 
+computational 
+efficiency 
+and 
+toolpath 
+accuracy.
+5.2. Materials and robot-assisted ESP setup
+The robot-assisted multi-axis embedded silicone print­
+ing platform used in this study is shown in Figure 10. 
+The system integrates a six degrees-of-freedoms 
+(DOFs) UR5e robotic arm, a mechanical screw-driven 
+extrusion module, and a support bath to enable 
+Figure 8. (a) Computational results of the customised vascular phantom containing both thin-shell and solid regions. (b) Compared 
+with the planar-based solution, the multi-axis ESP approach preserves the geometric fidelity and printing quality of critical regions 
+through the computation of curved layers. (c) Our iterative curved-slicing algorithm effectively controls the distribution of layer 
+height, ensuring better material deposition and smooth surface transitions. (d) Staggered toolpaths computed on odd and even 
+layers ensure stable extrusion and leak-free solid printing.
+VIRTUAL AND PHYSICAL PROTOTYPING 
+13
+precise free-form fabrication. The support bath is pre­
+pared by dissolving 0.5wt% Carbomer ETD2020 in 
+deionised water, followed by pH neutralisation with 
+NaOH and vacuum degassing. The two-component sili­
+cone inks consists of: Part A mixed with 1.5wt% THI- 
+VEX (3wt% for Ecoflex-0030) as a thickening agent, 
+and Part B mixed with 1wt% Slo-Jo as a retarder. All 
+silicone components are provided by SmoothOn but 
+with different mechanical characteristics. Specifically, 
+Ecoflex 0030 exhibits a Shore 00 hardness of 30 and 
+a tensile strength of 200 psi. In contrast, Dragon Skin 
+10 shows a Shore A hardness of 10 with a tensile 
+strength of 471 psi, whereas Dragon Skin 30 exhibits 
+a Shore A hardness of 30 and a tensile strength of 
+420 psi.
+Prior to printing, both components are pre-loaded 
+into individual syringes and driven by compressed air 
+into 
+a 
+dual-liquid 
+screw 
+extruder 
+(Model 
+600, 
+Company Xinhui Automation Technology Co., Ltd.), 
+which ensures continuous and precisely metered 
+mixing. The extrusion rate is regulated by a dedicated 
+extruder controller interfaced with the host computer 
+via an Ethernet connection. As discussed in Section 
+3.2, the extrusion rate is kept constant along the print­
+ing at 6.57 mm3/s.
+To achieve coordinated robot-extruder motion, we 
+provide a motion-planning method that synchronises 
+material extrusion with nozzle kinematics. The robot’s 
+trajectory is generated from a series of waypoints (as 
+defined in Equation (16)), where the desired end- 
+effector velocity is computed and mapped into joint 
+space by solving the differential kinematics using the 
+manipulator Jacobian [55]. The solution is executed in 
+real time through RoboDK [56] software (as shown on 
+the PC monitor in Figure 10), which communicates vel­
+ocity and position commands to the UR5e controller. 
+This closed control loop ensures smooth multi-axis 
+movement and stable material flow, allowing accurate 
+spatial deposition and reliable control of the local 
+material distribution.
+Figure 9. (a) The conventional molding process for fabricating deformable membranes requires substantial manual labour (figure 
+reproduced from [48], ©IEEE). (b) The mannequin chest model with inner free-form cavity represented by a two-layer tetrahedral 
+mesh. (c) Slicing result with preservation of critical surfaces V1 −V4. (d) Staggered toolpath computed on odd and even layers. 
+(e) Left: distribution of local layer heights within a single layer. Right: with deformation-based width control, issues of over- and 
+under-extrusion are eliminated. For visualisation purposes, the toolpath cross-section is computed from the waypoint speed following 
+Figure 2, where the cross-sectional height corresponds to the local layer height. (f) Cumulative distribution of path-width error with/ 
+without width-based deformation.
+Table 1. Statistics of tested models and computing time.
+Models
+Figure
+Model size (mm)
+Tet #
+Computing time of (Sec.)
+Layer #
+Total time (Sec.)
+Curved slicing
+Spatial toolpath Comp.
+Prosthetic socket
+Figure 1
+137 × 125 × 212
+255.8 k
+57.2
+198.5
+340
+255.7
+Soft robot
+Figure 7
+40 × 40 × 200
+207.3 k
+37.2
+29.6
+400
+66.8
+Aorta phantom
+Figure 8
+90 × 24 × 200
+115.5 k
+15.1
+20.8
+300
+35.9
+Mannequin chest
+Figure 9
+82 × 100 × 28
+197.5 k
+11.9
+64.2
+24
+76.1
+14 
+H. SUN ET AL.
+5.3. Fabrication result and characterisation
+With the assistance of multi-axis motion from the robotic 
+arm and precise synchronisation of micro-motor-driven 
+extrusion, the computed spatial toolpaths for the 
+models are fabricated, achieving accurate geometry and 
+fulfilling their intended functions as free-from solid struc­
+tures. All details of the physical printing process and phys­
+ical validation can be found in the supplemental video. 
+Notably, the spatial toolpaths with staggered patterns 
+exceptionally ensure air-tightness for models designed 
+for pneumatic actuation. The results for the soft robots 
+are shown in Figure 11, where the cross-section demon­
+strates that our method prevents local accumulation of 
+excessive ink in solid areas. The thin-wall sections 
+exhibit relatively uniform wall thickness, while the solid 
+sections are fully dense and void-free, indicating that 
+the staggered toolpath effectively provides infill. As 
+shown in Figure 11(b–d), these soft robots were fabri­
+cated with Ecoflex 0030 exhibit distinct deformation 
+behaviours under low pressure, where the thin-wall 
+regions expand under inflation, enabling the robots to 
+exhibit different deformation patterns, such as bending 
+and twisting under pressures of 6.5 kPa, 5 kPa, and 7  
+kPa, respectively. Importantly, the proposed method is 
+compatible with multiple silicone materials possessing 
+different rheological and mechanical properties (as dis­
+cussed in Section 3.1). Shown in Figure 11(e,f), S-shaped 
+robots printed using Mold Star 30 and Dragon Skin 10 
+also maintained stable morphology and air-tightness. 
+Under the same pressure of 18 kPa, the softer one dis­
+plays a larger bending curvature. These observations 
+demonstrate that the proposed method enables reliable 
+fabrication of comples soft devices from a wide range 
+of materials, thereby offering strong versatility and scal­
+ability for different functional and mechanical design 
+requirements.
+The successful fabrication of free-form soft mem­
+branes is demonstrated in Figure 12, where the 
+Figure 10. (a) Physical experiment setup of multi-axis ESP, where a 6-DOF robot arm is used to provide spatial material extrusion with 
+synchronised motion along the extruder. (b) Fabrication process of the prosthetic socket model.
+VIRTUAL AND PHYSICAL PROTOTYPING 
+15
+multi-axis printing process is showcased. As shown in 
+Figure 12(a2) and (a3), the top layer of the base and 
+the bottom layer of the top membrane successfully 
+form a free-form chamber. The caved support gel is 
+removed after printing when the air supply tube is 
+extracted. The printed model is then placed on a solid 
+PLA base, and when inflated with 10 kPa pressure, the 
+constant-thickness model expand into an approximately 
+spherical shape (Figure 12(b1)). In contrast, the variable- 
+thickness model inflates into a morphology more closely 
+resembling the human chest (Figure 12(b2)). Before and 
+after inflation, the model can replicate chest mor­
+phologies corresponding to different body types, as 
+shown in Figure 12(c), and the surface shapes before 
+Figure 12. (a) Multi-axis ESP process of a two-layer chest model with variable thickness where (a2) highlights the process formulation 
+enclosed pneumatic chamber (detail can also be found in supplemental video). (b) The chest models present different shapes after 
+inflation. Left: chest model with constant thickness; Right: chest model with variable thickness design (i.e. computational result shown 
+in Figure 9) can better mimic the human chest shape and it allows the shape change from (c) human chest shape 1 (left) to human 
+chest shape (right).
+Figure 11. Printing results of soft robot models with various silicone materials. (a) printing process with robot-assisted ESP; (b) Longi­
+tudinal cross-section of S-shaped soft robot and its inflated shape; (c) inflated twisting-type and (d) L-shaped soft robots; all three 
+robots were fabricated from Ecoflex 0030 but with different internal designs. (e) Deformation of the S-shaped soft robot made 
+from Mold Star 30 under different pressures; and (f) Deformation of S-shaped soft robots made from Dragon Skin 10 (left) and 
+Mold Star 30 (right) under the same pressure.
+16 
+H. SUN ET AL.
+and after deformation were validated using a 3D 
+scanner. This confirms that our proposed multi-axis 
+ESP method significantly enhances design freedom for 
+free-form surfaces.
+The physical fabrication of the aorta model is 
+demonstrated in Figure 13. It can be seen that critical 
+regions with large printing angles are protected with 
+high surface finishing with the help of multi-axis 
+motion, which ensures good material fusion and 
+proper silicone extrusion using the computed spatial 
+toolpath. We validated the fabricated models using 
+both 3D scanner (for outer surface) and CT imaging 
+(for internal porosity analyses). As shown in Figure 
+13(c2), the 3D scanner results reveal a high degree 
+of geometric conformity between the printed model 
+and the original design, with the surface error less 
+than 1.5 mm (1 % of the model size). Additionally, 
+the CT scans provide detailed cross-sectional imaging 
+and porosity analyses (Figure 13(c3)), demonstrating 
+the ability of the designed toolpath to achieve excel­
+lent infill performance with minimal voids (pore ratio: 
+0.25%). These results confirm that the proposed 
+multi-axis motion and toolpath planning method can 
+successfully produce complex geometries with high 
+precision and structural integrity.
+We also demonstrate the effectiveness of the pro­
+posed method compared with the planar-based sol­
+ution, where the toolpath is generated by commercial 
+software (e.g. Cura [57]). As shown in Figure 13(b), the 
+conventional ESP toolpath resulted in inferior printing 
+quality. As can be seen in the zoom-in region, for the 
+top part, distinct over- and under-deposition defects 
+are observed due to the absence of a volume-preser­
+vation strategy. In addition, noticeable staircase effect 
+and stringing defects appear on the printed surface 
+due to the discontinuity of the toolpath. By comparing 
+the dimensional error maps shown in Figure 13(b2) 
+and (c2), it can be observed that the proposed multi- 
+axis ESP method achieves markedly higher printing 
+accuracy than conventional ESP, with the average error 
+reduced from 0.49 mm to 0.2 mm, corresponding to a 
+59 % improvement in dimensional accuracy.
+The stability and reproducibility of the proposed 
+printing process were evaluated by repeatedly fabricat­
+ing the aorta model over multiple cycles. As shown in 
+Figure 13(d), the error distributions from multiple print 
+cycles are highly consistent, confirming the stable per­
+formance of our method for complex silicone structures. 
+These results demonstrate that the proposed multi-axis 
+motion and toolpath-planning strategy can reliably 
+Figure 13. (a) Multi-axis ESP process of the aorta model, where the spatial motion of the robot enables conformal printing to protect 
+critical regions. (b) Printed result of conventional planar-based ESP shows improper ink deposition and obvious stringing defects in 
+the critical region, which results in a larger dimensional error. (c) Printed result of our method showing good surface finishing, high 
+geometry accuracy, and good infill performance – as evidenced by the CT scanning result in (c3). (d) Error distributions from multiple 
+printing cycles. The three multi-axis printing cycles demonstrate excellent consistency and repeatability. Compared with conventional 
+planar ESP, the multi-axis printing achieves higher dimensional accuracy, reducing the average error from 0.49 mm to 0.20 mm.
+VIRTUAL AND PHYSICAL PROTOTYPING 
+17
+achieve high precision and structural integrity in complex 
+geometries. This stability highlights the potential of our 
+approach to support mass production of silicone phan­
+toms for biomedical applications. Furthermore, the MRI 
+signal characteristics of different tissues can be replicated 
+by tuning the infill density during printing [58]. Although 
+ESP may introduce more infill defects than conventional 
+DIW when fabricating solid volumetric parts, it offers a 
+distinct advantage: the ability to print tall, free-form, 
+and anatomically accurate structures without distortion 
+or collapse, making it particularly suitable for advanced 
+MRI phantom fabrication.
+5.4. Discussion
+With the support of experiment result, we have demon­
+strated that the width-constrained staggered toolpath 
+can effectively promote more uniform ink distribution 
+on curved layers with variable layer heights. However, 
+due to the inherent characteristics of ESP, local ink 
+over-deposition and pores caused by residual matrix 
+material cannot be completely avoided, particularly in 
+regions with complex geometry with sharp changes in 
+local volume. Moreover, compared with thin-wall struc­
+ture printing, volumetric printing using ESP requires 
+more extensive nozzle movements, and the frequent 
+motion of the nozzle may pull or disturb the surrounding 
+matrix in three-dimensional space, potentially affecting 
+the printed features and leading to manufacturing 
+defects. A potential solution is the introduction of an 
+in-situ monitoring system (e.g. the one reported for 
+DIW [59]) to evaluate the printing process in real time 
+and dynamically adjust printing parameters to compen­
+sate for these inconsistencies, which represents an 
+important direction for future exploration.
+Another challenge arises from potential collisions 
+between the printing nozzle and the material tank, 
+especially when fabricating surfaces with large slopes 
+or steep curvature. In this work, we employed a 6-DOF 
+robotic arm to maintain a constant printing angle and 
+ensure uniform filament morphology. However, when 
+printing large-scale objects, collision avoidance and 
+nozzle-orientation constraints together restrict the 
+achievable printing size. A straightforward approach is 
+to adjust the nozzle geometry based on the local 
+surface orientation. For example, switching between 
+different nozzle configurations, such as the 45◦or 90◦
+nozzle designs introduced in [12], can help prevent 
+interference by maintaining an optimal approach angle 
+relative to the surface. On the other hand, advanced 
+computational tool need to be developed to better 
+place the model accordingly to the robotic position, 
+reduce the potential of collision for this case.
+Future work will extend the proposed framework to 
+more diverse support matrix material and structures 
+with greater geometric complexity [60, 61]. By integrat­
+ing enhanced material compatibility with advanced 
+spatial toolpath planning, the framework can broaden 
+its range of applications. These capabilities will further 
+enable the fabrication of complex functional soft 
+devices, such as perceptive robots and biological 
+tissues, thereby advancing the design freedom and 
+overall performance of soft robotic and biomedical 
+systems. Additionally, incorporating multi-material ESP 
+[10, 41] together with the spatial printing proposed in 
+this work would further enhance printing flexibility 
+and reliability, particularly for fabricating functional 
+and geometrically complex soft devices.
+6. Conclusion
+In this work, we presented a robot-assisted multi-axis 
+embedded silicone printing platform capable of fabri­
+cating high-fidelity volumetric models with minimised 
+geometric distortion and eliminating staircase artifacts 
+on curved surfaces. The proposed computational 
+framework couples curved-layer slicing, printing-direc­
+tion planning, and width-constrained toolpath gener­
+ation to ensure uniform material distribution and 
+continuous filament deposition across complex geo­
+metries. Through the integration of high-DOF robotic 
+motion and an ink-volume control mechanism, stable 
+extrusion and accurate layer formation were achieved 
+within a gel-based support medium. Experimental vali­
+dation demonstrated that the printed structures 
+closely matched their target designs, confirming the 
+system’s ability to achieve solid infill, smooth surfaces, 
+and consistent material fusion. This work greatly 
+broadens the applicability of ESP toward fully volu­
+metric free-form manufacturing and demonstrates its 
+effectiveness in producing customised functional soft 
+systems.
+Notes
+1. Their material properties are shown in Figure 2.
+2. Available at https://doi.org/10.5281/zenodo.17596817.
+Acknowledgments
+The authors would like to thank the technical team at Rapid 
+Liquid Printing (RLP) for insightful discussions during the 
+initial stage of this project, and the anonymous reviewers for 
+their valuable comments. The authors acknowledge the 
+support of the Chinese University of Hong Kong, the Hong 
+Kong SAR Research Grants Council Early Career Scheme, 
+and the Shenzhen basic research key project.Hailin Sun: 
+18 
+H. SUN ET AL.
+Writing – original draft, Visualization, Validation, Software, 
+Methodology, Investigation, Formal,analysis, Data curation, 
+Conceptualization. 
+Yingjun,Tian: 
+Visualization, 
+Resources, 
+Software, Methodology, Data curation, Conceptualization, 
+Writing – review and,editing. Chenyu Xu: Visualization, 
+Resources, Software, Writing – review and editing. Mahdi 
+Bodaghi: Investigation, Methodology, Writing – review and 
+editing. Fei,Gao: Data curation, Conceptualization, Funding 
+acquisition, Writing – review and editing. Guoxin Fang:, 
+Writing – review and editing, Writing – original draft, Supervi­
+sion, Methodology, Investigation, Funding acquisition, Formal 
+analysis, Conceptualization.
+Disclosure statement
+No potential conflict of interest was reported by the author(s).
+Funding
+This research was supported by the Shun Hing Institute of 
+Advanced Engineering at the Chinese University of Hong 
+Kong (MMTp12-25), the Hong Kong SAR Research Grants 
+Council Early Career Scheme (RGC-ECS) (CUHK/24204924), 
+and Shenzhen basic research key project (Project No. 
+JCYJ20220818101407016).
+Author contributions
+CRediT: Hailin Sun: Conceptualization, Data curation, Formal 
+analysis, Investigation, Methodology, Software, Validation, 
+Visualization, Writing – original draft; Yingjun Tian: Data cura­
+tion, Methodology, Resources, Software, Visualization, Writing 
+– review & editing; Chenyu Xu: Resources, Software, Visualiza­
+tion, Writing – review & editing; Mahdi Bodaghi: Investigation, 
+Methodology, Writing – review & editing; Fei Gao: Conceptu­
+alization, Data curation, Funding acquisition, Writing – review 
+& editing; Guoxin Fang: Conceptualization, Funding acqui­
+sition, Methodology, Project administration, Resources, Super­
+vision, Visualization, Writing – original draft, Writing – review & 
+editing.
+Data availability statement
+The raw test data (generated sliced layer and toolpath) sup­
+porting the findings of this study are openly available in 
+Zenodo at: https://doi.org/10.5281/zenodo.17596694.
+The supplemental video of this work can be found at: 
+https://doi.org/10.5281/zenodo.17596817.
+ORCID
+Hailin Sun 
+http://orcid.org/0000-0002-7251-2860
+Yingjun Tian 
+http://orcid.org/0000-0002-9213-2179
+Chenyu Xu 
+http://orcid.org/0009-0001-2808-2664
+Mahdi Bodaghi 
+http://orcid.org/0000-0002-0707-944X
+Fei Gao 
+http://orcid.org/0000-0001-9637-6114
+Guoxin Fang 
+http://orcid.org/0000-0001-8741-3227
+References
+[1] Shit SC, Shah P. A review on silicone rubber. National 
+Acad Sci Lett. 2013;36(4):355–365. doi: 10.1007/s40009- 
+013-0150-2
+[2] Khas KS, Pandey PM, Ray AR. Rapid manufacturing of a 
+clubfoot model imitating soft tissue and bones. Virtual 
+Phys 
+Prototyp. 
+2013;8(3):187–192. 
+doi: 
+10.1080/ 
+17452759.2013.836455
+[3] Mohammed MI, Cadd B, Peart G, et al. Augmented patient- 
+specific facial prosthesis production using medical 
+imaging modelling and 3d printing technologies for 
+improved patient outcomes. Virtual Phys Prototyp. 
+2018;13(3):164–176. doi: 10.1080/17452759.2018.1446122
+[4] Pfeil S, Katzer K, Kanan A, et al. A biomimetic fish fin-like 
+robot 
+based 
+on 
+textile 
+reinforced 
+silicone. 
+Micromachines. 2020;11(3):298. doi: 10.3390/mi11030298
+[5] Bell MA, Becker KP, Wood RJ. Injection molding of soft 
+robots. Adv Mater Technol. 2022;7(1):2100605. doi: 10. 
+1002/admt.v7.1
+[6] Liravi F, Toyserkani E. Additive manufacturing of silicone 
+structures: A review and prospective. Addit Manuf. 
+2018;24:232–242.
+[7] Yang Z, Zhu W, Shi J, et al. Rapid in-situ thermal curing 3d 
+printing of engineering thermosetting resins. Virtual Phys 
+Prototyp. 2025;20(1):e2553180. doi: 10.1080/17452759. 
+2025.2553180
+[8] Zhao J, He N. A mini-review of embedded 3d printing: 
+supporting media and strategies. J Mater Chem B. 
+2020;8(46):10474–10486. doi: 10.1039/D0TB01819H
+[9] Zeng X, Meng Z, Qiu Z, et al. Melt-based embedded print­
+ing for freeform fabrication of overhanging and flexible 
+polycaprolactone 
+scaffolds. 
+Virtual 
+Phys 
+Prototyp. 
+2023;18(1):e2209778. 
+doi: 
+10.1080/17452759.2023. 
+2209778
+[10] Li Y, Wu Z, Chen Y, et al. Multi-material embedded 3d 
+printing for one-step manufacturing of multifunctional 
+components 
+in 
+soft 
+robotics. 
+Addit 
+Manuf. 
+2024;85:104178.
+[11] Calais T, Sanandiya ND, Jain S, et al. Freeform liquid 3d 
+printing of soft functional components for soft robotics. 
+ACS Appl Mater Interfaces. 2021;14(1):2301–2315. doi: 
+10.1021/acsami.1c20209
+[12] Wang Z, Zhang B, He Q, et al. Multimaterial embedded 3d 
+printing of composite reinforced soft actuators. Research. 
+2023;6:0122. doi: 10.34133/research.0122
+[13] Sparrman B, Du Pasquier C, Thomsen C, et al. Printed sili­
+cone pneumatic actuators for soft robotics. Addit Manuf. 
+2021;40:101860.
+[14] Albert BJ, Wang C, Williams C, et al. Non-planar 
+embedded 3d printing for complex hydrogel manufactur­
+ing. Bioprinting. 2022;28:e00242. doi: 10.1016/j.bprint. 
+2022.e00242
+[15] Arun ND, Yang H, Yao L, et al. Nonplanar 3d printing of 
+epoxy using freeform reversible embedding. Adv Mater 
+Technol. 2023;8(7):2201542. doi: 10.1002/admt.v8.7
+[16] Shojaei Barjuei E, Shin J, Kim K, et al. High-precision multi- 
+axis robotic printing: optimized workflow for complex 
+tissue creation. Bioengineering. 2025;12(9):949. doi: 10. 
+3390/bioengineering12090949
+[17] Grosskopf AK, Truby RL, Kim H, et al. Viscoplastic matrix 
+materials for embedded 3d printing. ACS Appl Mater 
+VIRTUAL AND PHYSICAL PROTOTYPING 
+19
+Interfaces. 
+2018;10(27):23353–23361. 
+doi: 
+10.1021/ 
+acsami.7b19818
+[18] Hua W, Zhang C, Mitchell K, et al. Filament formation 
+mechanisms in yield-stress fluid-enabled embedded ink 
+writing. Addit Manuf. 2024;91:104353.
+[19] Bhattacharjee T, Zehnder SM, Rowe KG, et al. Writing in 
+the granular gel medium. Sci Adv. 2015;1(8):e1500655. 
+doi: 10.1126/sciadv.1500655
+[20] Song K, Compaan AM, Chai W, et al. Injectable gelatin 
+microgel-based composite ink for 3d bioprinting in air. 
+ACS Appl Mater Interfaces. 2020;12(20):22453–22466. 
+doi: 10.1021/acsami.0c01497
+[21] Jin Y, Song K, Gellermann N, et al. Printing of hydrophobic 
+materials in fumed silica nanoparticle suspension. ACS 
+Appl Mater Interfaces. 2019;11(32):29207–29217. doi: 10. 
+1021/acsami.9b07433
+[22] Rapid Liquid Print. Rapid liquid print; 2024 [accessed 2024 
+Jul 12]. Available from: https://www.rapidliquidprint. 
+com/
+[23] Menon A, Póczos B, Feinberg AW, et al. Optimization of 
+silicone 3d printing with hierarchical machine learning. 
+3D Printing Addit Manuf. 2019;6(4):181–189. doi: 10. 
+1089/3dp.2018.0088
+[24] Greenwood TE, Hatch SE, Colton MB, et al. 3d printing 
+low-stiffness silicone within a curable support matrix. 
+Addit Manuf. 2021;37:101681.
+[25] Zhao J, Hussain M, Wang M, et al. Embedded 3d printing 
+of multi-internal surfaces of hydrogels. Addit Manuf. 
+2020;32:101097.
+[26] Young CA, O’Bannon M, Thomson SL. Three-dimensional 
+printing of ultrasoft silicone with a functional stiffness 
+gradient. 3D Printing Addit Manuf. 2024;11(2):435–445. 
+doi: 10.1089/3dp.2022.0218
+[27] Kubalak JR, Wicks AL, Williams CB. Using multi-axis 
+material extrusion to improve mechanical properties 
+through surface reinforcement. Virtual Phys Prototyp. 
+2018;13(1):32–38. doi: 10.1080/17452759.2017.1392686
+[28] Ye J, Guo Q, Lu H, et al. Topology optimisation of self-sup­
+porting structures based on the multi-directional 
+additive 
+manufacturing 
+technique. 
+Virtual 
+Phys 
+Prototyp. 2023;18(1):e2271458. doi: 10.1080/17452759. 
+2023.2271458
+[29] Huang J, Ware HOT, Hai R, et al. Conformal geometry and 
+multimaterial additive manufacturing through freeform 
+transformation 
+of 
+building 
+layers. 
+Adv 
+Mater. 
+2021;33(11):2005672. doi: 10.1002/adma.v33.11
+[30] Dai C, Liu T, Guo D, et al. Curve-based slicer for multi-axis 
+dlp 
+3d 
+printing. 
+ACM 
+Trans 
+Graphics 
+(TOG). 
+2025;44(6):194–14doi: 10.1145/3763352
+[31] Fang G, Zhang T, Huang Y, et al. Exceptional mechanical 
+performance by spatial printing with continuous fiber: 
+curved slicing, toolpath generation and physical verifica­
+tion. Addit Manuf. 2024;82:104048.
+[32] Gao S, Liao W-H, Guo P. Development of a multi- 
+directional metal 3d printing system based on direct 
+metal 
+deposition. 
+In: 
+International 
+Manufacturing 
+Science and Engineering Conference, Vol. 58745. Erie 
+(PA): 
+American 
+Society 
+of 
+Mechanical 
+Engineers; 
+2019. p. V001T01A014.
+[33] Goh GL, Dikshit V, Koneru R, et al. Fabrication of design- 
+optimized multifunctional safety cage with conformal cir­
+cuits for drone using hybrid 3d printing technology. Int J 
+Advanced Manuf Technol. 2022;120(3):2573–2586. doi: 
+10.1007/s00170-022-08831-y
+[34] Mendoza-Bautista KJ, Flores-Jimenez MS, Vázquez Tejeda 
+Serrano LD, et al. Collaborative heterogeneous mini- 
+robotic 3d printer for manufacturing complex food struc­
+tures with multiple inks and curved deposition surfaces. 
+Micromachines. 2025;16(3):264. doi: 10.3390/mi16030264
+[35] Zhang Z, Wu C, Dai C, et al. A multi-axis robot-based bio­
+printing system supporting natural cell function preser­
+vation and cardiac tissue fabrication. Bioactive Mater. 
+2022;18:138–150. doi: 10.1016/j.bioactmat.2022.02.009
+[36] Hajash K, Sparrman B, Guberan C, et al. Large-scale rapid 
+liquid printing. 3D Printing Addit Manuf. 2017;4(3):123– 
+132. doi: 10.1089/3dp.2017.0037
+[37] Duraivel S, Laurent D, Rajon DA, et al. A silicone-based 
+support material eliminates interfacial instabilities in 3d 
+silicone printing. Science. 2023;379(6638):1248–1252. 
+doi: 10.1126/science.ade4441
+[38] Etienne J, Ray N, Panozzo D, et al. Curvislicer: slightly 
+curved slicing for 3-axis printers. ACM Trans Graphics 
+(TOG). 2019;38(4):1–11. doi: 10.1145/3306346.3323022
+[39] Guerra A, Fortunato GM, Bonatti AF, et al. A cylindrical 
+slicing algorithm for four-axis non-planar bioprinting of 
+complex geometries. Int J Bioprinting. 2025;11(2):494– 
+509. doi: 10.36922/IJB025070053
+[40] Qu J, Huang Z, Guo D, et al. Inf-3dp: implicit neural fields 
+for collision-free multi-axis 3d printing. ACM Trans 
+Graphics (TOG). 2025;44(6):1–18. doi: 10.1145/3763354
+[41] Wang Z, Zhang B, Cui W, et al. Freeform fabrication of 
+pneumatic soft robots via multi-material jointed direct 
+ink writing. Macromol Mater Eng. 2022;307(4):2100813. 
+doi: 10.1002/mame.v307.4
+[42] Fang G, Zhang T, Zhong S, et al. Reinforced fdm: multi- 
+axis filament alignment with controlled anisotropic 
+strength. ACM Trans Graphics (TOG). 2020;39(6):1–15. 
+doi: 10.1145/3414685.3417834
+[43] Dutta N, Zhang T, Fang G, et al. Vector field-based volume 
+peeling for multi-axis machining. J Comput Inf Sci Eng. 
+2024;24(5):051001. doi: 10.1115/1.4063861
+[44] Crane K, Weischedel C, Wardetzky M. The heat method for 
+distance computation. Commun ACM. 2017;60(11):90–99. 
+doi: 10.1145/3131280
+[45] Knöppel F, Crane K, Pinkall U, et al. Stripe patterns on sur­
+faces. ACM Trans Graphics (TOG). 2015;34(4):1–11. doi: 10. 
+1145/2767000
+[46] Zhang T, Liu T, Dutta N, et al. Toolpath generation 
+for high density spatial fiber printing guided by 
+principal stresses. Composites Part B: Engineering. 
+2025;295:112154. 
+doi: 
+10.1016/j.compositesb.2025. 
+112154
+[47] Liu L, Zhang L, Xu Y, et al. A local/global approach to 
+mesh parameterization. In: Computer graphics forum, 
+Vol. 27. Copenhagen: Wiley Online Library; 2008. 
+p. 1495–1504.
+[48] Tian Y, Fang G, Petrulis JS, et al. Soft robotic mannequin: 
+design and algorithm for deformation control. IEEE ASME 
+Trans Mechatron. 2022;27(4):1820–1828. doi: 10.1109/ 
+TMECH.2022.3175759
+[49] Zhong Z, Wang W, Lévy B, et al. Computing a high-dimen­
+sional euclidean embedding from an arbitrary smooth 
+riemannian 
+metric. 
+ACM 
+Trans 
+Graphics 
+(TOG). 
+2018;37(4):1–16. doi: 10.1145/3197517.3201369
+20 
+H. SUN ET AL.
+[50] Guennebaud G, Jacob B. Eigen v3.3; 2019 [accessed 2024 
+Aug 6]. Available from: http://eigen.tuxfamily.org
+[51] Fang Y, Guo Y, Wu B, et al. Expanding embedded 3d bio­
+printing capability for engineering complex organs with 
+freeform vascular networks. Adv Mater. 2023;35(22): 
+2205082. doi: 10.1002/adma.v35.22
+[52] Scharff RB, Fang G, Tian Y, et al. Sensing and reconstruc­
+tion of 3-d deformation on pneumatic soft robots. IEEE 
+ASME Trans Mechatron. 2021;26(4):1877–1885. doi: 10. 
+1109/TMECH.2021.3078263
+[53] Li S, Xie B, Chen Y, et al. Design and 3d printing of lower 
+limb prosthetic socket. In: 2024 IEEE International 
+Conference on Cyborg and Bionic Systems (CBS). 
+Nagoya: IEEE; 2024. p. 27–32.
+[54] Wang E, Zhang Q, Shen B, et al. Intel math kernel library. 
+In: High-Performance Computing on the Intel® Xeon 
+Phi
+TM: How to Fully Exploit MIC Architectures. Cham: 
+Springer; 2014. p. 167–188.
+[55] Chen Y, Zhang T, Huang Y, et al. Co-optimization of tool 
+orientations, kinematic redundancy, and waypoint 
+timing for robot-assisted manufacturing. IEEE Trans 
+Autom Sci Eng. 2025;22:12102–12117. doi: 10.1109/ 
+TASE.2025.3542218
+[56] Robodk. Robodk: simulator for robot arms and offline 
+programming. Available from: https://robodk.com/
+[57] Ultimaker cura. Available from: https://ultimaker.com/ 
+software/ultimaker-cura/
+[58] Hatamikia S, Zaric O, Jaksa L, et al. Evaluation of 3d- 
+printed silicone phantoms with controllable mri signal 
+properties. Int J Bioprinting. 2025;11(3):381–396.
+[59] Mejia EB, McDougall L, Gonsalves N, et al. Real-time process 
+monitoring and automated control for direct ink write 3d 
+printing of frontally polymerizing thermosets. npj Adv 
+Manuf. 2025;2(1):18. doi: 10.1038/s44334-025-00032-1
+[60] Wang X, Li Z, Deng J, et al. Unprecedented strength 
+enhancement observed in interpenetrating phase com­
+posites of aperiodic lattice metamaterials. Adv Funct 
+Mater. 2025;35(1):2406890. doi: 10.1002/adfm.v35.1
+[61] Wang X, Li X, Li Z, et al. Superior strength, toughness, and 
+damage-tolerance observed in microlattices of aperiodic 
+unit cells. Small. 2024;20(23):2307369. doi: 10.1002/smll. 
+v20.23
+VIRTUAL AND PHYSICAL PROTOTYPING 
+21

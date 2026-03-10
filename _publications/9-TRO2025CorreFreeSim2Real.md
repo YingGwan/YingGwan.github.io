@@ -4,7 +4,7 @@ Authors: 'Y. Tian, G. Fang, R. Su, A. Lyu, N. Dutta, W. Wang, S. Gill, A. Weight
 collection: publications
 permalink: /publication/TRO2025CorreFreeSim2Real
 excerpt: '**[1st Author]** Correspondence-free sim-to-real learning for general surface modelling and control'
-date: 2025-08-24
+date: 2025-12-01
 venue: 'IEEE Transactions on Robotics'
 ---
 Are you tired of sim-to-real transfer methods demanding perfect, dense marker correspondences? What if you could learn deformation functions directly from partial, noisy 3D scans or motion capture data with missing markers? We present a novel correspondence-free, function-based sim-to-real learning method for controlling deformable freeform surfaces. Unlike traditional approaches, our method simultaneously learns a deformation function space and a confidence map to bridge the sim-to-real gap, tolerating highly imperfect real-world observations!

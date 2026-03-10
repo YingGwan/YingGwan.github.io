@@ -4,7 +4,7 @@ Authors: 'Y. Tian, G. Fang, A. Lyu, X. Wang, Z. Shi, Y. Guo, W. Wang, and C.C.L.
 collection: publications
 permalink: /publication/TRO2026SensorOpt
 excerpt: '**[1st Author]** Task-gradient optimization for sparse, physics-ready sensor layouts with manufacturability constraints'
-date: 2026-01-01
+date: 2026-03-01
 venue: 'IEEE Transactions on Robotics'
 ---
 Are massive, densely-packed sensor arrays truly better? Does designing them manually via trial-and-error have to be so painstakingly time-consuming? No! We present a novel simulator-free computational design framework that uses **task gradients** to optimize an initial massive number of random sensors down to a sparse, physics-ready, and highly accurate layout. By encoding strict discrete fabrication rules into **differentiable loss functions**, our method autonomously co-optimizes the sensor layout alongside a shape prediction network via end-to-end gradient descent.
